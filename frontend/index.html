@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NodeLoki - Visual Node Builder & App Designer</title>
+  
+  <!-- Drawflow & FontAwesome Dependencies -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Project Manager Modal -->
+  <div id="project-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h2><i class="fa-solid fa-folder-tree"></i> NodeLoki Project Manager</h2>
+      <p>Create a new workspace or open an existing project folder from your local `/projects` directory.</p>
+      
+      <div class="modal-action-bar">
+        <button type="button" id="modal-new-btn" class="btn primary" onclick="createNewProject()">
+          <i class="fa-solid fa-plus"></i> Create New Project
+        </button>
+      </div>
+
+      <div class="modal-list-container">
+        <h3>Saved Local Projects</h3>
+        <ul id="modal-project-list">
+          <li style="padding:10px; color:#888;">Loading projects...</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top App Navigation / Header Bar -->
+  <header class="app-header">
+    <div class="header-left">
+      <h1 class="logo"><i class="fa-solid fa-network-wired"></i> NodeLoki</h1>
+      <div class="view-switchers">
+        <button id="view-nodes-btn" class="tab-btn active" onclick="switchToNodeView()"><i class="fa-solid fa-diagram-project"></i> Logic Nodes</button>
+        <button id="view-app-btn" class="tab-btn" onclick="switchToAppView()"><i class="fa-solid fa-mobile-screen"></i> UI Designer</button>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <button id="save-project-btn" class="btn secondary"><i class="fa-solid fa-save"></i> Save Project</button>
+      <button id="run-btn" class="btn primary"><i class="fa-solid fa-play"></i> Run App</button>
+      <button id="clear-btn" class="btn danger"><i class="fa-solid fa-trash-can"></i> Clear</button>
+      <button id="projects-modal-btn" class="btn secondary" onclick="showProjectModal()"><i class="fa-solid fa-folder-open"></i> Projects</button>
+    </div>
+  </header>
+
+  <!-- Main Application Workspace -->
+  <div class="workspace">
+
+    <!-- VIEW 1: Logic Node Editor -->
+    <section id="node-view" class="view-panel active">
+      <!-- Left Sidebar: Nodes Catalog -->
+      <aside class="sidebar">
+        <div class="sidebar-search">
+          <input type="text" id="node-search" placeholder="Search nodes...">
+        </div>
+        <div id="nodes-list" class="nodes-list">
+          <!-- Populated dynamically -->
+        </div>
+      </aside>
+
+      <!-- Center: Drawflow Canvas -->
+      <div class="canvas-container" id="drawflow" ondrop="dropNode(event)" ondragover="allowDrop(event)">
+        <div class="canvas-grid-bg"></div>
+      </div>
+
+      <!-- Right Sidebar: Node Property Inspector -->
+      <aside class="inspector">
+        <div class="inspector-header"><i class="fa-solid fa-sliders"></i> Node Inspector</div>
+        <div id="node-inspector-content" class="inspector-body">
+          <p class="empty-msg">Click any node on the canvas to inspect its properties.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- VIEW 2: UI Application Designer Stage -->
+    <section id="app-view" class="view-panel">
+      <!-- Target Picker Overlay Banner -->
+      <div id="picker-banner" class="picker-banner hidden">
+        <span><i class="fa-solid fa-crosshairs fa-beat"></i> Click any UI Element on the stage to target it for your node action...</span>
+        <button id="cancel-picker-btn" class="btn small danger">Cancel</button>
+      </div>
+
+      <!-- Left Sidebar: UI Component Palette -->
+      <aside class="sidebar">
+        <div class="category-title">UI Layout & Containers</div>
+        <div class="ui-palette-item" draggable="true" ondragstart="dragUI(event)" data-ui="frame"><i class="fa-solid fa-window-maximize"></i> App Frame / Box</div>
+        <div class="ui-palette-item" draggable="true" ondragstart="dragUI(event)" data-ui="card"><i class="fa-solid fa-square"></i> Content Card</div>
+
+        <div class="category-title">Interactive Elements</div>
+        <div class="ui-palette-item" draggable="true" ondragstart="dragUI(event)" data-ui="button"><i class="fa-solid fa-hand-pointer"></i> Interactive Button</div>
+        <div class="ui-palette-item" draggable="true" ondragstart="dragUI(event)" data-ui="input"><i class="fa-solid fa-keyboard"></i> Text Input Field</div>
+
+        <div class="category-title">Display Elements</div>
+        <div class="ui-palette-item" draggable="true" ondragstart="dragUI(event)" data-ui="text"><i class="fa-solid fa-font"></i> Text Label</div>
+        <div class="ui-palette-item" draggable="true" ondragstart="dragUI(event)" data-ui="image"><i class="fa-solid fa-image"></i> Image Placeholder</div>
+      </aside>
+
+      <!-- Center: App Layout Canvas Stage -->
+      <div class="app-canvas-container" id="app-canvas" ondrop="dropUI(event)" ondragover="allowDrop(event)">
+        <div class="app-phone-frame-hint">Drag UI components here to build your app layout</div>
+      </div>
+
+      <!-- Right Sidebar: UI Element Inspector -->
+      <aside class="inspector">
+        <div class="inspector-header"><i class="fa-solid fa-paint-brush"></i> UI Inspector</div>
+        <div id="inspector-content" class="inspector-body">
+          <p class="empty-msg">Click any item on the stage to customize its options.</p>
+        </div>
+      </aside>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
