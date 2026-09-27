@@ -1,11 +1,4 @@
-{
-  "name": "nodeloki",
-  "version": "1.0.0",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "build": {
+"build": {
     "appId": "com.nodeloki.app",
     "productName": "NodeLoki",
     "directories": {
@@ -25,7 +18,7 @@
       "target": ["dmg", "zip"]
     },
     "linux": {
-      "target": ["AppImage", "deb", "rpm"]
+      "target": ["AppImage", "deb", "rpm"],
+      "category": "Utility"
     }
   }
-}
