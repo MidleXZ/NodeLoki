@@ -1,9 +1,10 @@
 name: Build Desktop App
 
 on:
+  workflow_dispatch: # <--- This adds a manual "Run workflow" button on GitHub!
   push:
     tags:
-      - 'v*' # Triggers automatically whenever you push a tag starting with 'v' (e.g., v1.0.0)
+      - 'v*'
 
 jobs:
   release:
