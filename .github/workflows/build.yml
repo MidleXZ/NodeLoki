@@ -7,13 +7,22 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      fail-fast: false # Keeps Windows and macOS running even if Ubuntu fails
+      fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: linux
+            build_cmd: npx electron-builder --linux AppImage deb rpm --publish never
+          - os: windows-latest
+            artifact_name: windows
+            build_cmd: npx electron-builder --win --publish never
+          - os: macos-latest
+            artifact_name: macos
+            build_cmd: npx electron-builder --mac --publish never
 
     steps:
       - name: Check out Git repository
@@ -22,12 +31,19 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: 'npm'
 
-      - name: Build Electron App & Installers
-        uses: samuelmeuli/action-electron-builder@v1
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build App Installers
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ${{ matrix.build_cmd }}
+
+      - name: Upload Installers
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
-          use_vue_cli: false
+          name: nodeloki-${{ matrix.artifact_name }}
+          path: dist/
