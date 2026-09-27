@@ -2,6 +2,7 @@
   "name": "nodeloki",
   "version": "1.0.0",
   "description": "Visual Node Builder App",
+  "author": "MidleXZ",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -17,8 +18,7 @@
       "main.js",
       "server.js",
       "frontend/**/*",
-      "package.json",
-      "node_modules/**/*"
+      "package.json"
     ],
     "win": {
       "target": ["nsis"]
