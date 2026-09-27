@@ -1,7 +1,7 @@
 name: Build Desktop App
 
 on:
-  workflow_dispatch: # <--- This adds a manual "Run workflow" button on GitHub!
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -24,12 +24,10 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: Build Electron App & Installers
         uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release: true
+          # Automatically enable release mode only if a version tag was pushed
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
           use_vue_cli: false
