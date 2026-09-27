@@ -2,7 +2,7 @@
   "name": "nodeloki",
   "version": "1.0.0",
   "description": "Visual Node Builder App",
-  "author": "gethmiller-pixel gethmiller@gmail.com",
+  "author": "gethmiller-pixel <gethmiller@gmail.com>",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
