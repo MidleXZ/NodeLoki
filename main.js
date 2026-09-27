@@ -1,7 +1,10 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
-// This starts your Express server automatically when the app launches!
+// Provide a safe writable path for file system operations in packaged apps
+process.env.USER_DATA_PATH = app.getPath('userData');
+
+// Start the Express backend server
 require('./server.js');
 
 function createWindow() {
@@ -14,7 +17,7 @@ function createWindow() {
     }
   });
 
-  // Load your frontend interface (adjust the path if your HTML file is elsewhere in frontend/)
+  // Load the frontend user interface
   mainWindow.loadFile(path.join(__dirname, 'frontend/index.html'));
 }
 
